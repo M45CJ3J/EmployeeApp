@@ -43,7 +43,10 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $i =1; ?>
+                <?php $i =1; 
+                $class_array = array("bg-primary","bg-danger","bg-success","bg-warning");
+                ?>
+              
                 @foreach ($employees as $employee)
                     <tr>
                         <td>{{ $i++ }}</td>
@@ -52,9 +55,21 @@
                         <td>{{ $employee->age }}</td>
                         <td>{{ $employee->birth_date }}</td>
                         <td>{{ $employee->hired_date }}</td>
-                        <td>{{ $employee->department->name }}</td>
+                        <td 
+                        <?php if($employee->department->name == 'HR'){echo "class=".$class_array[0]; } 
+                           elseif($employee->department->name == 'engneeering'){echo "class=".$class_array[1]; }
+                           elseif($employee->department->name == 'Accounting'){echo "class=".$class_array[2]; }
+                           ?>
+                           
+                         >{{ $employee->department->name }}</td>
                         <td>{{ $employee->division }}</td>
+                       
+                        @if($employee->img_path)    
                         <td> <img src=/public/images/{{$employee->img_path}} width="100px" height="100px" alt={{$employee->img_path}}></td>
+                        @else
+                        <td>no photo</td>
+                        @endif
+
                         <td>
                             <form action="" method="Post">
                                 <a class="btn btn-primary" href="#">Edit</a>
