@@ -14,14 +14,45 @@ class EmployeesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
-  //  try {
-        $employees = Employee::orderBy('id','asc')->paginate(5);
-         return view('welcome', compact('employees'))
-        ->with('i', (request()->input('page', 1) - 1) * 5);
-   /* } catch (\Exception $e) {
+    public function index(Request $request) {
+      //  dd($request);
+    try {
+       // dd($request);
+        if(isset($request->fname)){
+            $employees = Employee::where('fname', $request->fname)
+        
+            ->orderBy('id','asc')->paginate(5);
+            return view('welcome', compact('employees'))
+           ->with('i', (request()->input('page', 1) - 1) * 5);
+        }
+        elseif(isset($request->department)){
+            $departments = Department::Where('name', 'like', '%' . $request->department . '%')
+            ->get();
+
+            $employees = Employee::where('department_id', $departments->id)
+            ->orderBy('id','asc')->paginate(5);
+            return view('welcome', compact('employees'))
+           ->with('i', (request()->input('page', 1) - 1) * 5);
+        }
+        elseif(isset($request->fname) && isset($request->department)){
+            $departments = Department::Where('name', 'like', '%' . $request->department . '%')
+            ->get();
+
+            $employees = Employee::where('department_id', $departments->id)
+            ->Where('fname', 'like', '%' . $request->fname . '%')
+            ->orderBy('id','asc')->paginate(5);
+            return view('welcome', compact('employees'))
+           ->with('i', (request()->input('page', 1) - 1) * 5);
+        }
+        else{
+            $employees = Employee::orderBy('id','asc')->paginate(5);
+            return view('welcome', compact('employees','request'))
+           ->with('i', (request()->input('page', 1) - 1) * 5);
+       }
+      
+    } catch (\Exception $e) {
         return(" error." . $e );
-    }*/
+    }
     }
 
     /**
@@ -29,12 +60,12 @@ class EmployeesController extends Controller
      */
     public function create()
     {
-     //  try {
+       try {
         $departments = Department::all();
         return view('create', compact('departments'));
-        /* } catch (\Exception $e) {
+         } catch (\Exception $e) {
         return(" error." . $e );
-         }*/
+         }
     }
 
     /**
@@ -42,7 +73,7 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
-       // try {
+        try {
         Log::info('new employee created');
        //dd($request->img_path);
        $request->validate([
@@ -75,9 +106,9 @@ class EmployeesController extends Controller
        $request->file('img_path')->move('public/images', $fileName);
         }
         return redirect()->to('/')->with('success','Employee created successfully.');
-        /* } catch (\Exception $e) {
+         } catch (\Exception $e) {
         return(" error." . $e );
-         }*/
+         }
     }
 
     /**
