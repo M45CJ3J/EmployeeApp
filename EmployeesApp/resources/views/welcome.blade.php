@@ -22,6 +22,22 @@
                 </div>
             </div>
         </div>
+
+        <form class="form-inline" action="/" method="GET">
+      
+      
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">first name</label>
+            <input type="text" class="form-control" id="inputPassword2" placeholder="name" name="fname">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">department</label>
+            <input type="text" class="form-control" id="inputPassword2" placeholder="department" name="department">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+        </form>
+
+
         @if ($message = Session::get('success'))
             <div class="alert alert-success">
                 <p>{{ $message }}</p>
@@ -84,6 +100,7 @@
             </tbody>
         </table>
         {!! $employees->links() !!}
+      
     </div>
 
     @endsection
